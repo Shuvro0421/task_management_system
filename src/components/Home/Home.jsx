@@ -1,9 +1,11 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
+import Body from '../Body/Body';
 
 const Home = () => {
     return (
         <div>
-            <h1>hello</h1>
+            <Outlet></Outlet>
         </div>
     );
 };
