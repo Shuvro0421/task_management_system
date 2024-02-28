@@ -71,7 +71,7 @@ const Body = () => {
                 </div>
             </div>
             {/* outlet */}
-            <div className='md:pt-20 w-full lg:w-[1200px] 2xl:w-[1400px] mx-auto px-10 md:px-0 pt-10'>
+            <div className='md:pt-20 w-full lg:w-[1200px] 2xl:w-[1400px] mx-auto px-10 md:px-5 pt-10'>
                 <Outlet></Outlet>
             </div>
         </div>

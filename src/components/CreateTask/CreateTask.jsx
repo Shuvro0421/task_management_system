@@ -10,12 +10,16 @@ const CreateTask = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [dueDate, setDueDate] = useState('');
-    const [priority, setPriority] = useState('');
+    const [priority, setPriority] = useState(''); // Initial state set to an empty string
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (priority === '') {
+            setErrorMessage('Please select a priority.');
+            return;
+        }
         try {
             await axios.post('http://localhost:5000/tasks', {
                 title,
@@ -39,26 +43,27 @@ const CreateTask = () => {
     };
 
     return (
-        <div className="w-full mx-auto  font-semibold p-6 bg-blue-400 rounded-lg shadow-md">
+        <div className="w-full mx-auto  font-semibold p-6 mt-10 md:mt-0 bg-blue-400 rounded-lg shadow-md">
             <h1 className="text-3xl text-white mb-4">Create Task</h1>
             {successMessage && <p className="text-white mb-4">{successMessage}</p>}
             {errorMessage && <p className="text-red-700 mb-4">{errorMessage}</p>}
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                     <label className="block text-white mb-1">Title</label>
-                    <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-4 py-2 rounded-lg bg-white text-blue-400 focus:outline-none focus:bg-gray-100" />
+                    <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-4 py-2 rounded-lg bg-white text-blue-400 focus:outline-none focus:bg-gray-100" />
                 </div>
                 <div>
                     <label className="block text-white mb-1">Description</label>
-                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full px-4 py-2 rounded-lg bg-white text-blue-400 focus:outline-none focus:bg-gray-100"></textarea>
+                    <textarea value={description} required onChange={(e) => setDescription(e.target.value)} className="w-full px-4 py-2 rounded-lg bg-white text-blue-400 focus:outline-none focus:bg-gray-100"></textarea>
                 </div>
                 <div>
                     <label className="block text-white mb-1">Due Date</label>
-                    <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="w-full px-4 py-2 rounded-lg bg-white text-blue-400 focus:outline-none focus:bg-gray-100" />
+                    <input type="date" value={dueDate} required onChange={(e) => setDueDate(e.target.value)} className="w-full px-4 py-2 rounded-lg bg-white text-blue-400 focus:outline-none focus:bg-gray-100" />
                 </div>
                 <div>
                     <label className="block text-white mb-1">Priority</label>
-                    <select value={priority} onChange={(e) => setPriority(e.target.value)} className="w-full px-4 py-2 rounded-lg bg-white text-blue-400 focus:outline-none focus:bg-gray-100">
+                    <select value={priority} required onChange={(e) => setPriority(e.target.value)} className="w-full px-4 py-2 rounded-lg bg-white text-blue-400 focus:outline-none focus:bg-gray-100">
+                        <option value="" disabled>Select Priority</option> {/* Disabled option */}
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
