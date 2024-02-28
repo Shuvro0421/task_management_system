@@ -12,6 +12,8 @@ import AuthProvider from './components/AuthProvider/AuthProvider';
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import CreateTask from './components/CreateTask/CreateTask';
+import TaskCategories from './components/TaskCategories/TaskCategories';
 
 
 
@@ -24,7 +26,17 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <PrivateRoute><Body /></PrivateRoute> 
+        element: <PrivateRoute><Body /></PrivateRoute>,
+        children:[
+          {
+            path:'/',
+            element: <CreateTask></CreateTask>
+          },
+          {
+            path:'/taskCategories',
+            element: <TaskCategories></TaskCategories>
+          },
+        ]
       },
       {
         path: "/login",

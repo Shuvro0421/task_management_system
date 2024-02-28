@@ -55,13 +55,13 @@ const Login = () => {
     }, [error]);
 
     return (
-        <div className="hero min-h-screen" style={{ backgroundImage: 'url(https://cdn.hero.page/wallpapers/3c808cff-8d2f-472b-83ae-f6bb894275bb-mystical-forest-art-wallpaper-wallpaper-2.png)' }}>
+        <div className="hero min-h-screen " style={{ backgroundImage: 'url(https://i.ibb.co/3NpJjHc/1-Svz-Kct-RCi8bw-B0-QPd-OZk-BP0p-Rhs-Oq-Zpl0wjs6y0.png)' }}>
             <div className="hero-overlay bg-opacity-60"></div>
             <div className="hero-content text-center text-neutral-content">
                 <div className="max-w-md">
                     <div className="hero min-h-screen ">
                         <div className="hero-content md:w-96 mt-14 flex-col lg:flex-row-reverse">
-                            <div className="card flex-shrink-0 w-full text-black max-w-sm shadow-2xl bg-slate-900 bg-opacity-50 backdrop-blur-md">
+                            <div className="card flex-shrink-0 w-full text-black max-w-sm shadow-2xl bg-slate-900 bg-opacity-25 backdrop-blur-md">
                                 <form id="login-form" onSubmit={handleLogin} className="card-body">
                                     <div className="form-control">
                                         <label className="label">

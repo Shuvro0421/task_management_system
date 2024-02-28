@@ -56,13 +56,13 @@ const Register = () => {
     }
 
     return (
-        <div className="hero min-h-screen" style={{ backgroundImage: 'url(https://cdn.wallpapersafari.com/2/94/nreGO9.png)' }}>
+        <div className="hero min-h-screen " style={{ backgroundImage: 'url(https://i.ibb.co/L5SPmVD/task-tracker-cover-1200x675.png)' }}>
             <div className="hero-overlay bg-opacity-60"></div>
             <div className="hero-content text-center text-neutral-content">
                 <div className="max-w-md">
                     <div className="hero min-h-screen">
                         <div className="hero-content md:w-96 mt-14 flex-col lg:flex-row-reverse">
-                            <div className="card flex-shrink-0 w-full text-black max-w-sm shadow-2xl bg-slate-900 bg-opacity-30">
+                            <div className="card flex-shrink-0 w-full text-black max-w-sm shadow-2xl bg-slate-900 bg-opacity-25 backdrop-blur-md">
                                 <form onSubmit={handleRegister} className="card-body">
                                     <div className="form-control">
                                         <label className="label">
