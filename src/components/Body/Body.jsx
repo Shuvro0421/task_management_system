@@ -25,6 +25,11 @@ const Body = () => {
                     Task Categories
                 </Link>
             </li>
+            <li className='transition-transform ease-in-out duration-150 active:scale-95'>
+                <Link to={'/taskLists'} className={location.pathname === '/taskLists' ? 'text-blue-400' : 'text-white'}>
+                    Task Lists
+                </Link>
+            </li>
         </>
     );
 

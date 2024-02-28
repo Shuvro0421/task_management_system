@@ -14,6 +14,7 @@ import Register from './components/Register/Register';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import CreateTask from './components/CreateTask/CreateTask';
 import TaskCategories from './components/TaskCategories/TaskCategories';
+import TaskLists from './components/TaskLists/TaskLists';
 
 
 
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
           {
             path:'/taskCategories',
             element: <TaskCategories></TaskCategories>
+          },
+          {
+            path:'/taskLists',
+            element: <TaskLists></TaskLists>
           },
         ]
       },
