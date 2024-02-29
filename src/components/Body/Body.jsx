@@ -30,6 +30,11 @@ const Body = () => {
                     Task Lists
                 </Link>
             </li>
+            <li className='transition-transform ease-in-out duration-150 active:scale-95'>
+                <Link to={'/taskAssignment'} className={location.pathname === '/taskAssignment' ? 'text-blue-400' : 'text-white'}>
+                    Task Assignment
+                </Link>
+            </li>
         </>
     );
 
@@ -49,7 +54,7 @@ const Body = () => {
         <div>
             <div className="relative">
                 <button
-                    className="fixed left-0 top-0 m-4 p-2 bg-blue-400 shadow-2xl text-white rounded-full z-10"
+                    className="fixed left-0 top-0 m-4 p-2 bg-blue-400 shadow-2xl text-white rounded-full z-10 transition-transform ease-in-out duration-150 active:scale-95"
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     {isOpen ? <AiOutlineClose /> : <FiMenu />}

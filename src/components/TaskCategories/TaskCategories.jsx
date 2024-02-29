@@ -56,7 +56,7 @@ const TaskCategories = () => {
                                 </h1>
                             </div>
                             <select className='text-sm outline-none text-blue-400' onChange={(e) => handleCategoryChange(task._id, e.target.value)}>
-                                <option value="" disabled selected>Select Category</option>
+                                <option value="" disabled selected>{task?.category ? task.category : 'Select Category'}</option>
                                 <option value="Category A">Category A</option>
                                 <option value="Category B">Category B</option>
                                 <option value="Category C">Category C</option>

@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthProvider/AuthProvider";
+import axios from 'axios'; // Import Axios
 import useTitle from "../hooks/useTitle";
-
 
 const Register = () => {
     useTitle('Register')
@@ -11,49 +11,48 @@ const Register = () => {
     const [success, setSuccess] = useState('')
     const [error, setError] = useState('')
 
-    const handleRegister = e => {
-        e.preventDefault()
-        const form = e.target
-        const name = form.name.value
-        const image = form.image.value
-        const email = form.email.value
-        const password = form.password.value
-        const user = { name, image, email, password }
-        console.log(user)
-        setError('')
-        setSuccess('')
-        if (password.length < 6) {
-            setError('Password should be at least 6 characters')
-            return
-        }
-        else if (!/[A-Z]/.test(password)) {
-            setError('Password should contain 1 uppercase letter')
-            return
-        }
-        else if (!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/"'`|]/.test(password)) {
-            setError('Password should contain 1 special character')
-            return
-        }
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const name = form.name.value;
+        const image = form.image.value;
+        const email = form.email.value;
+        const password = form.password.value;
+        const user = { name, image, email, password };
+        setError('');
+        setSuccess('');
 
-        createUser(email, password)
-            .then(result => {
-                console.log('registered successfully', result.user)
-                setSuccess('registered successfully!')
-                updateProfileInfo(name, image)
-                    .then(() => {
-                        console.log("User profile updated successfully");
-                    })
-                    .catch(error => {
-                        console.error("Error updating user profile: ", error);
-                    });
+        try {
+            // Validation checks for password
+            if (password.length < 6) {
+                setError('Password should be at least 6 characters');
+                return;
+            } else if (!/[A-Z]/.test(password)) {
+                setError('Password should contain 1 uppercase letter');
+                return;
+            } else if (!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/"'`|]/.test(password)) {
+                setError('Password should contain 1 special character');
+                return;
+            }
 
-                form.reset()
-            })
-            .catch(error => {
-                console.log(error)
-                user ? setError('User already exits') : setError(error)
-            })
-    }
+            // Create user
+            const createUserResult = await createUser(email, password);
+            console.log('registered successfully', createUserResult.user);
+            setSuccess('registered successfully!');
+
+            // Update user profile
+            await updateProfileInfo(name, image);
+            console.log('User profile updated successfully');
+
+            // Post user data to /users using Axios
+            await axios.post('http://localhost:5000/users', { name, email });
+
+            form.reset();
+        } catch (error) {
+            console.error(error);
+            user ? setError('User already exists') : setError(error.message || 'An error occurred');
+        }
+    };
 
     return (
         <div className="hero min-h-screen " style={{ backgroundImage: 'url(https://i.ibb.co/L5SPmVD/task-tracker-cover-1200x675.png)' }}>
@@ -94,7 +93,6 @@ const Register = () => {
                                         </label>
                                     </div>
                                     <div className="form-control mt-6">
-
                                         <input className="btn text-white bg-blue-500 hover:text-blue-500 hover:bg-white border-none  normal-case" type="submit" value="Register" />
                                     </div>
                                 </form>

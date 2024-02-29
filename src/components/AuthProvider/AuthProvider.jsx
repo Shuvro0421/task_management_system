@@ -11,8 +11,6 @@ export const AuthContext = createContext(null)
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
-    
-
 
 
     const updateProfileInfo = (displayName = null, photoURL = null) => {
@@ -74,14 +72,29 @@ const AuthProvider = ({ children }) => {
     const handleGoogleSignIn = () => {
         signInWithPopup(auth, googleProvider)
             .then(result => {
-                const loggedUser = result.user
-                setUser(loggedUser)
-                setLoading(true)
-                console.log(loggedUser)
+                const loggedUser = result.user;
+                setUser(loggedUser);
+                setLoading(true);
+
+                const userData = {
+                    name: loggedUser.displayName,
+                    email: loggedUser.email
+                };
+
+                axios.post('http://localhost:5000/users', userData)
+                    .then(res => {
+                        console.log('User data stored successfully:', res.data);
+                        setLoading(false);
+                    })
+                    .catch(error => {
+                        console.error('Error storing user data:', error);
+                        setLoading(false);
+                    });
             })
-
-            .catch(error => console.error(error))
-
+            .catch(error => {
+                console.error('Error signing in with Google:', error);
+                setLoading(false);
+            });
     }
 
     const authInfo = { createUser, signInUser, user, logOut, updateProfileInfo, handleGoogleSignIn, loading }

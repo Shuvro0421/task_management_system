@@ -55,7 +55,7 @@ const Login = () => {
     }, [error]);
 
     return (
-        <div className="hero min-h-screen " style={{ backgroundImage: 'url(https://i.ibb.co/3NpJjHc/1-Svz-Kct-RCi8bw-B0-QPd-OZk-BP0p-Rhs-Oq-Zpl0wjs6y0.png)' }}>
+        <div className="hero min-h-screen bg-fixed overflow-scroll" style={{ backgroundImage: 'url(https://i.ibb.co/3NpJjHc/1-Svz-Kct-RCi8bw-B0-QPd-OZk-BP0p-Rhs-Oq-Zpl0wjs6y0.png)' }}>
             <div className="hero-overlay bg-opacity-60"></div>
             <div className="hero-content text-center text-neutral-content">
                 <div className="max-w-md">

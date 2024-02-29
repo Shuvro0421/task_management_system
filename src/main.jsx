@@ -15,6 +15,7 @@ import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import CreateTask from './components/CreateTask/CreateTask';
 import TaskCategories from './components/TaskCategories/TaskCategories';
 import TaskLists from './components/TaskLists/TaskLists';
+import TaskAssignment from './components/TaskAssignment/TaskAssignment';
 
 
 
@@ -22,38 +23,42 @@ import TaskLists from './components/TaskLists/TaskLists';
 const router = createBrowserRouter([
   {
     path: "/",
-    errorElement: <ErrorPage />,
     element: <Home />,
     children: [
       {
         path: "/",
-        element: <PrivateRoute><Body /></PrivateRoute>,
-        children:[
+        element: <Body />,
+        children: [
           {
-            path:'/',
-            element: <CreateTask></CreateTask>
+            path: "/",
+            element: <CreateTask />,
           },
           {
-            path:'/taskCategories',
-            element: <TaskCategories></TaskCategories>
+            path: "/taskCategories",
+            element: <TaskCategories />,
           },
           {
-            path:'/taskLists',
-            element: <TaskLists></TaskLists>
+            path: "/taskLists",
+            element: <TaskLists />,
           },
-        ]
+          {
+            path: "/taskAssignment",
+            element: <TaskAssignment />,
+          },
+        ],
       },
       {
         path: "/login",
-        element: <Login />
+        element: <Login />,
       },
       {
         path: "/register",
-        element: <Register />
+        element: <Register />,
       },
-    ]
+    ],
   },
 ]);
+
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
