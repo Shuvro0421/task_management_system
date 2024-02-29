@@ -15,7 +15,7 @@ const TaskCategories = () => {
         setLoading(true); // Set loading state to true before fetching tasks
         // Fetch tasks from '/tasks/email'
         axios.get(`http://localhost:5000/tasks/${email}`)
-            .then(response => {
+            .then(response => { 
                 setTasks(response.data);
                 setLoading(false); // Set loading state to false after fetching tasks
             })

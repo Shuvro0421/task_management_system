@@ -16,6 +16,7 @@ import CreateTask from './components/CreateTask/CreateTask';
 import TaskCategories from './components/TaskCategories/TaskCategories';
 import TaskLists from './components/TaskLists/TaskLists';
 import TaskAssignment from './components/TaskAssignment/TaskAssignment';
+import ManageUsers from './components/ManageUsers/ManageUsers';
 
 
 
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
           {
             path: "/taskAssignment",
             element: <TaskAssignment />,
+          },
+          {
+            path: "/manageUsers",
+            element: <ManageUsers />,
           },
         ],
       },

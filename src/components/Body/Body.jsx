@@ -1,17 +1,18 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { FiMenu } from 'react-icons/fi';
 import { AiOutlineClose } from 'react-icons/ai';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import useTitle from '../hooks/useTitle';
 import { AuthContext } from '../AuthProvider/AuthProvider';
-
+import axios from 'axios';
 
 const Body = () => {
     useTitle('Home');
     const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
-    const { user, logOut } = useContext(AuthContext); // Access user object and signOut function from AuthContext
-    const navigate = useNavigate()
+    const { user, logOut } = useContext(AuthContext);
+    const navigate = useNavigate();
+
 
     const links = (
         <>
@@ -35,6 +36,13 @@ const Body = () => {
                     Task Assignment
                 </Link>
             </li>
+
+            <li className='transition-transform ease-in-out duration-150 active:scale-95'>
+                <Link to={'/manageUsers'} className={location.pathname === '/manageUsers' ? 'text-blue-400' : 'text-white'}>
+                    Manage Users
+                </Link>
+            </li>
+
         </>
     );
 
@@ -43,7 +51,6 @@ const Body = () => {
             .then(() => {
                 console.log('logged out')
                 navigate('/login')
-
             })
             .catch(error => {
                 console.log(error)
@@ -62,7 +69,7 @@ const Body = () => {
 
                 <div className={`fixed left-0 top-0 h-full w-64 bg-blue-900 bg-opacity-70 backdrop-blur-md shadow-lg transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                     <div className='text-center text-white font-semibold mt-20  mx-6 h-[500px] custom-scrollbar overflow-auto'>
-                        {user && ( // Check if user is logged in
+                        {user && (
                             <div className=''>
                                 <img src={user?.photoURL} alt="User" className="w-20 border-2 border-white h-20 mx-auto rounded-full mb-2" />
                                 <div className="text-lg">{user.displayName}</div>
