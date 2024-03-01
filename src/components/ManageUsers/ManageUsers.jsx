@@ -5,6 +5,8 @@ import Swal from 'sweetalert2';
 
 const ManageUsers = () => {
     const [users, setUsers] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1); // State to track current page
+    const usersPerPage = 5; // Number of users to display per page
 
     useEffect(() => {
         // Fetch user emails using Axios
@@ -67,9 +69,15 @@ const ManageUsers = () => {
         });
     };
 
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
-        <div className='font-semibold'>
-            <h1 className='text-3xl'>Manage Users</h1>
+        <div className='font-semibold mt-10'>
+            <h1 className='text-3xl font-semibold text-blue-400'>Manage Users</h1>
             <div className="overflow-x-auto mt-10">
                 <table className="min-w-full divide-y divide-blue-400">
                     <thead>
@@ -79,7 +87,7 @@ const ManageUsers = () => {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-blue-400">
-                        {users.map((user, index) => (
+                        {currentUsers.map((user, index) => (
                             <tr key={index}>
                                 <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
@@ -95,6 +103,15 @@ const ManageUsers = () => {
                     </tbody>
                 </table>
             </div>
+            <ul className="pagination flex items-center justify-center gap-3 mt-10 my-5">
+                {Array.from({ length: Math.ceil(users.length / usersPerPage) }).map((_, index) => (
+                    <li key={index} className="page-item">
+                        <button onClick={() => paginate(index + 1)} className={`page-link ${currentPage === index + 1 ? 'bg-blue-400 px-2 rounded-md  text-white font-semibold' : 'text-blue-400 active:scale-95 duration-150 ease-in-out transition-transform'}`}>
+                            {index + 1}
+                        </button>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };

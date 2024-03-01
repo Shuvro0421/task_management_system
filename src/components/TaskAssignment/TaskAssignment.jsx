@@ -100,11 +100,11 @@ const TaskAssignment = () => {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
-        <div className='font-semibold'>
-            {successMessage && <div className="success-message text-blue-400 font-semibold">{successMessage}</div>}
+        <div className='font-semibold mt-10 md:mt-0'>
+            <h1 className='text-3xl font-semibold text-blue-400 my-5'>Task Assignment</h1>
             <div>
                 <h3 className=''>Select users:</h3>
-                <div>
+                <div className='flex gap-2'>
                     <input
                         type="checkbox"
                         id="select-all"
@@ -115,7 +115,7 @@ const TaskAssignment = () => {
                 </div>
                 <div className='h-20 custom-scrollbar overflow-auto'>
                     {users.map(user => (
-                        <div key={user._id}>
+                        <div className='flex gap-2' key={user._id}>
                             <input
                                 type="checkbox"
                                 id={`user-${user._id}`}
@@ -131,7 +131,7 @@ const TaskAssignment = () => {
             {loading ? (
                 <div>Loading...</div>
             ) : (
-                <div className='font-semibold mt-10'>
+                <div className='font-semibold mt-5'>
                     <div className='grid md:grid-cols-3 grid-cols-1 lg:grid-cols-4 gap-5'>
                         {currentTasks.map(task => (
                             <div
@@ -167,6 +167,7 @@ const TaskAssignment = () => {
                     </ul>
                 </div>
             )}
+            {successMessage && <div className="success-message text-blue-400 font-semibold">{successMessage}</div>}
             <button className='my-10 bg-blue-400 text-white py-2 px-1 rounded-lg transition-transform ease-in-out duration-150 active:scale-95' onClick={assignTasks}>Assign Tasks</button>
         </div>
     );

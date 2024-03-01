@@ -17,6 +17,7 @@ import TaskCategories from './components/TaskCategories/TaskCategories';
 import TaskLists from './components/TaskLists/TaskLists';
 import TaskAssignment from './components/TaskAssignment/TaskAssignment';
 import ManageUsers from './components/ManageUsers/ManageUsers';
+import TaskStatusTracking from './components/TaskStatusTracking/TaskStatusTracking';
 
 
 
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
           {
             path: "/manageUsers",
             element: <ManageUsers />,
+          },
+          {
+            path: "/taskStatusTracking",
+            element: <TaskStatusTracking />,
           },
         ],
       },

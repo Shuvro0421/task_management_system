@@ -44,6 +44,11 @@ const Body = () => {
                     Manage Users
                 </Link>
             </li>
+            <li className='transition-transform ease-in-out duration-150 active:scale-95'>
+                <Link to={'/taskStatusTracking'} className={location.pathname === '/taskStatusTracking' ? 'text-blue-400' : 'text-white'}>
+                    Task Status Tracking
+                </Link>
+            </li>
 
         </>
     );
