@@ -13,12 +13,14 @@ const TaskAssignment = () => {
     const [selectedUsers, setSelectedUsers] = useState([]); // State to store selected users
     const [selectAll, setSelectAll] = useState(false); // State to track Select All checkbox
     const [successMessage, setSuccessMessage] = useState('');
+    const [currentPage, setCurrentPage] = useState(1); // State to track current page
+    const tasksPerPage = 5; // Number of tasks to display per page
     const { user } = useContext(AuthContext);
     const email = user?.email;
 
     useEffect(() => {
         // Fetch tasks from '/tasks/email'
-        axios.get(`http://localhost:5000/tasks/${email}`)
+        axios.get(`http://localhost:5000/tasks`)
             .then(response => {
                 setTasks(response.data);
                 setLoading(false);
@@ -37,6 +39,10 @@ const TaskAssignment = () => {
                 console.error('Error fetching users:', error);
             });
     }, [email]);
+
+    const indexOfLastTask = currentPage * tasksPerPage;
+    const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+    const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
 
     const handleTaskSelect = (taskId) => {
         setSelectedTasks(prevSelectedTasks => {
@@ -58,6 +64,7 @@ const TaskAssignment = () => {
         });
     };
 
+
     const toggleSelectAll = () => {
         if (selectAll) {
             setSelectedUsers([]);
@@ -70,25 +77,28 @@ const TaskAssignment = () => {
     const assignTasks = () => {
         // Gather details of selected tasks
         const selectedTaskDetails = tasks.filter(task => selectedTasks.includes(task._id));
-    
+
         // Make a POST request to the server
         axios.post('http://localhost:5000/assign-tasks', {
             selectedTaskDetails: selectedTaskDetails,
             selectedUsers: selectedUsers,
-            senderEmail: user.email
+            senderEmail: email // Include user email here
         })
-        .then(response => {
-            console.log('Tasks assigned successfully');
-            setSuccessMessage('Tasks assigned successfully');
-            // Optionally, you can reset selectedTasks and selectedUsers state
-            setSelectedTasks([]);
-            setSelectedUsers([]);
-            setSelectAll(false); // Reset Select All checkbox
-        })
-        .catch(error => {
-            console.error('Error assigning tasks:', error);
-        });
+            .then(response => {
+                console.log('Tasks assigned successfully');
+                setSuccessMessage('Tasks assigned successfully');
+                // Optionally, you can reset selectedTasks and selectedUsers state
+                setSelectedTasks([]);
+                setSelectedUsers([]);
+                setSelectAll(false); // Reset Select All checkbox
+            })
+            .catch(error => {
+                console.error('Error assigning tasks:', error);
+            });
     };
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
         <div className='font-semibold'>
             {successMessage && <div className="success-message text-blue-400 font-semibold">{successMessage}</div>}
@@ -123,7 +133,7 @@ const TaskAssignment = () => {
             ) : (
                 <div className='font-semibold mt-10'>
                     <div className='grid md:grid-cols-3 grid-cols-1 lg:grid-cols-4 gap-5'>
-                        {tasks.map(task => (
+                        {currentTasks.map(task => (
                             <div
                                 key={task._id}
                                 className={`p-5 rounded-lg cursor-pointer shadow-2xl ${selectedTasks.includes(task._id) ? 'bg-blue-100' : ''}`}
@@ -143,6 +153,18 @@ const TaskAssignment = () => {
                             </div>
                         ))}
                     </div>
+                    <ul className="pagination flex items-center justify-center gap-3 mt-10">
+                        {Array.from({ length: Math.ceil(tasks.length / tasksPerPage) }).map((_, index) => (
+                            <li key={index} className="page-item">
+                                <button
+                                    onClick={() => paginate(index + 1)}
+                                    className={`page-link ${currentPage === index + 1 ? 'bg-blue-400 px-2 rounded-md  text-white font-semibold' : 'text-blue-400 active:scale-95 duration-150 ease-in-out transition-transform'}`} // Apply bg-blue-400 if the button corresponds to the current page
+                                >
+                                    {index + 1}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             )}
             <button className='my-10 bg-blue-400 text-white py-2 px-1 rounded-lg transition-transform ease-in-out duration-150 active:scale-95' onClick={assignTasks}>Assign Tasks</button>

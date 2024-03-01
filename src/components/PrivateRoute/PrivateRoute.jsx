@@ -1,27 +1,25 @@
-import React, { createContext, useState, useEffect } from "react";
-import auth from "../../firebase.config";
+import { useContext } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../AuthProvider/AuthProvider";
 
 
-export const AuthContext = createContext();
 
-const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Set loading to true initially
+const PrivateRoute = ({ children }) => {
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      setUser(authUser);
-      setLoading(false); // Set loading to false when auth state changes
-    });
+    const { user, loading } = useContext(AuthContext)
+    const location = useLocation()
+    console.log(location.pathname)
 
-    return unsubscribe;
-  }, []);
+    if (loading) {
+        return <div className="flex items-center justify-center my-40">
+            <img className="w-96" src="https://i.ibb.co/618PjDM/octo-loader-unscreen.gif" alt="" />
+        </div>
+    }
+    if (user) {
+        return children
+    }
 
-  return (
-    <AuthContext.Provider value={{ user, loading }}>
-      {children}
-    </AuthContext.Provider>
-  );
+    return <Navigate state={location.pathname} to={'/login'}></Navigate>
 };
 
-export default AuthProvider;
+export default PrivateRoute;

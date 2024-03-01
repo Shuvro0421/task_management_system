@@ -59,9 +59,12 @@ const Register = () => {
             <div className="hero-overlay bg-opacity-60"></div>
             <div className="hero-content text-center text-neutral-content">
                 <div className="max-w-md">
-                    <div className="hero min-h-screen">
+                    <div className="hero ">
                         <div className="hero-content md:w-96 mt-14 flex-col lg:flex-row-reverse">
                             <div className="card flex-shrink-0 w-full text-black max-w-sm shadow-2xl bg-slate-900 bg-opacity-25 backdrop-blur-md">
+                                <div>
+                                    <h1 className='text-white text-xl font-semibold mt-5'>Task Management Sign up</h1>
+                                </div>
                                 <form onSubmit={handleRegister} className="card-body">
                                     <div className="form-control">
                                         <label className="label">
