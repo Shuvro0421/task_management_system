@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 const ManageUsers = () => {
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // State to track current page
+    const [searchQuery, setSearchQuery] = useState(''); // State to hold the search query
     const usersPerPage = 5; // Number of users to display per page
 
     useEffect(() => {
@@ -71,40 +72,70 @@ const ManageUsers = () => {
 
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+    // Function to filter users based on search query
+    const filteredUsers = users.filter(user =>
+        user.email.toLowerCase().includes(searchQuery.toLowerCase()) || // Search by email
+        user.name.toLowerCase().includes(searchQuery.toLowerCase())   // Search by name
+    );
+
+    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
         <div className='font-semibold mt-10'>
             <h1 className='text-3xl font-semibold text-blue-400'>Manage Users</h1>
-            <div className="overflow-x-auto mt-10">
+
+            {/* Search input field */}
+            <div className="mt-5 mb-5">
+                <input
+                    type="text"
+                    placeholder="Search by email"
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="border border-blue-400 outline-none text-blue-400 px-4 py-2 rounded-md"
+                />
+            </div>
+
+            <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-blue-400">
                     <thead>
                         <tr className=' text-center'>
                             <th scope="col" className="px-6 py-3 text-left text-sm font-medium text-blue-400 uppercase tracking-wider ">Email</th>
+                            <th scope="col" className="px-6 py-3 text-left text-sm font-medium text-blue-400 uppercase tracking-wider ">Name</th>
                             <th scope="col" className="px-6 py-3 text-left text-sm font-medium text-blue-400 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-blue-400">
-                        {currentUsers.map((user, index) => (
-                            <tr key={index}>
-                                <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <button
-                                        className="bg-blue-400 text-white font-bold py-2 px-4 rounded transition-transform ease-in-out duration-150 active:scale-95"
-                                        onClick={() => handleAdminAction(user.email, user.isAdmin)}
-                                    >
-                                        {user.isAdmin ? 'Remove Manager' : 'Make Manager'}
-                                    </button>
-                                </td>
+                        {currentUsers.length > 0 ? (
+                            currentUsers.map((user, index) => (
+                                <tr key={index}>
+                                    <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <button
+                                            className="bg-blue-400 text-white font-bold py-2 px-4 rounded transition-transform ease-in-out duration-150 active:scale-95"
+                                            onClick={() => handleAdminAction(user.email, user.isAdmin)}
+                                        >
+                                            {user.isAdmin ? 'Remove Manager' : 'Make Manager'}
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td className="px-6 py-4 text-left text-blue-400">No users found.</td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
+
                 </table>
             </div>
-            <ul className="pagination flex items-center justify-center gap-3 mt-10 my-5">
-                {Array.from({ length: Math.ceil(users.length / usersPerPage) }).map((_, index) => (
+
+            {/* Pagination */}
+            <ul className="pagination flex items-center justify-center gap-3 mt-5">
+                {Array.from({ length: Math.ceil(filteredUsers.length / usersPerPage) }).map((_, index) => (
                     <li key={index} className="page-item">
                         <button onClick={() => paginate(index + 1)} className={`page-link ${currentPage === index + 1 ? 'bg-blue-400 px-2 rounded-md  text-white font-semibold' : 'text-blue-400 active:scale-95 duration-150 ease-in-out transition-transform'}`}>
                             {index + 1}

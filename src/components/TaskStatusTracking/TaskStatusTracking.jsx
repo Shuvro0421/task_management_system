@@ -12,6 +12,11 @@ const TaskStatusTracking = () => {
     const [userUserId, setUserUserId] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const tasksPerPage = 5;
+    const [keyword, setKeyword] = useState('');
+    const [dueDate, setDueDate] = useState('');
+    const [priority, setPriority] = useState('');
+    const [category, setCategory] = useState('');
+    const [status, setStatus] = useState('');
     const email = user?.email;
 
     useEffect(() => {
@@ -42,7 +47,17 @@ const TaskStatusTracking = () => {
 
     const id = userUserId[0]?._id;
 
-    const filteredTasks = tasks.filter(task => task.userId === id);
+    // Apply filters
+    const filteredTasks = tasks.filter(task => {
+        return (
+            task.userId === id &&
+            task.title.toLowerCase().includes(keyword.toLowerCase()) &&
+            (dueDate ? task.dueDate === dueDate : true) &&
+            (priority ? task.priority === priority : true) &&
+            (category ? task.category === category : true) &&
+            (status ? task.status === status : true)
+        );
+    });
 
     const indexOfLastTask = currentPage * tasksPerPage;
     const indexOfFirstTask = indexOfLastTask - tasksPerPage;
@@ -54,7 +69,6 @@ const TaskStatusTracking = () => {
         axios.post(`http://localhost:5000/assign-tasks/${taskId}`, { status })
             .then(response => {
                 if (response.data.success) {
-                    // Update the task status in the frontend
                     setTasks(tasks.map(task => task._id === taskId ? { ...task, status: status || null } : task));
                     console.log(response.data.message);
                 } else {
@@ -66,26 +80,47 @@ const TaskStatusTracking = () => {
             });
     };
 
-
-
     return (
-        <div className='font-semibold mt-10'>
+        <div className='font-semibold mt-10 text-blue-400'>
             {loading ? (
                 <div>Loading...</div>
             ) : (
                 <div>
-                    <h1 className='text-3xl font-semibold text-blue-400 my-5'>Task Categories</h1>
+                    <h1 className='text-3xl font-semibold text-blue-400 my-5'>Task Status Tracking</h1>
+                    <div className="mb-4 space-y-2">
+                        <input type="text" placeholder="Search by title" value={keyword} onChange={(e) => setKeyword(e.target.value)} className="border border-blue-400 outline-none rounded-md p-2 mr-2" />
+                        <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="border outline-none border-blue-400 rounded-md p-2 mr-2" />
+                        <select value={priority} onChange={(e) => setPriority(e.target.value)} className="border border-blue-400 outline-none rounded-md p-2 mr-2">
+                            <option value="">Select Priority</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                        <select value={category} onChange={(e) => setCategory(e.target.value)} className="border outline-none border-blue-400 rounded-md p-2 mr-2">
+                            <option value="">Select Category</option>
+                            <option value="Category A">Category A</option>
+                            <option value="Category B">Category B</option>
+                            <option value="Category C">Category C</option>
+                            <option value="Category D">Category D</option>
+                        </select>
+                        <select value={status} onChange={(e) => setStatus(e.target.value)} className="border outline-none border-blue-400 rounded-md p-2 mr-2">
+                            <option value="">Select Status</option>
+                            <option value="To-Do">To-Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
                     {currentTasks.length === 0 ? (
-                        <div className='text-blue-400 text-center'>No task assigned</div>
+                        <div className='text-blue-400 text-left'>No match found</div>
                     ) : (
                         <div>
                             <div className='grid md:grid-cols-3 grid-cols-1 lg:grid-cols-4 gap-5'>
                                 {currentTasks.map(task => (
                                     <div className='p-5 rounded-lg shadow-2xl' key={task._id}>
                                         <h1 className='text-xl text-blue-400'>{task.title}</h1>
-                                        <h1 className='h-28 overflow-auto'>{task.description}</h1>
+                                        <h1 className='h-28 overflow-auto text-gray-800'>{task.description}</h1>
                                         <div className='text-xs flex lg:items-center items-start gap-2 lg:flex-row flex-col justify-between my-2'>
-                                            <h1><span className='text-blue-400 mr-1'>Due date:</span> {task.dueDate}</h1>
+                                            <h1>Due date: <span className='text-gray-800'>{task.dueDate}</span></h1>
                                             <h1><span className='text-blue-400 mr-1'>Priority:</span>
                                                 <span className={task.priority === 'low' ? 'text-green-400' : task.priority === 'medium' ? 'text-yellow-400' : 'text-red-400'}>
                                                     {task.priority}
@@ -109,7 +144,7 @@ const TaskStatusTracking = () => {
                                 ))}
                             </div>
                             <ul className="pagination flex items-center justify-center gap-3 mt-10 my-5">
-                                {Array.from({ length: Math.ceil(tasks.length / tasksPerPage) }).map((_, index) => (
+                                {Array.from({ length: Math.ceil(filteredTasks.length / tasksPerPage) }).map((_, index) => (
                                     <li key={index} className="page-item">
                                         <button
                                             onClick={() => paginate(index + 1)}

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
-import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+import { AiFillBell, AiOutlineBell, AiOutlineClose, AiOutlineMenu, AiOutlineNotification } from 'react-icons/ai';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import useTitle from '../hooks/useTitle';
 import { AuthContext } from '../AuthProvider/AuthProvider';
@@ -12,7 +12,21 @@ const Body = () => {
     const { user, logOut } = useContext(AuthContext);
     const navigate = useNavigate();
     const drawerRef = useRef(null);
+    const [openBox, setOpenBox] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false); // State to track admin status
 
+    useEffect(() => {
+        if (!user) return;
+        axios.get(`http://localhost:5000/users/${user.email}`)
+            .then(response => {
+                const userData = response.data;
+                const isAdmin = userData.length > 0 && userData[0].isAdmin;
+                setIsAdmin(isAdmin);
+            })
+            .catch(error => {
+                console.error('Error fetching user details:', error);
+            });
+    }, [user]);
 
 
 
@@ -33,17 +47,19 @@ const Body = () => {
                     Task Lists
                 </Link>
             </li>
-            <li className='transition-transform ease-in-out duration-150 active:scale-95'>
+            {isAdmin && (<li className='transition-transform ease-in-out duration-150 active:scale-95'>
                 <Link to={'/taskAssignment'} className={location.pathname === '/taskAssignment' ? 'text-blue-400' : 'text-white'}>
                     Task Assignment
                 </Link>
-            </li>
+            </li>)}
 
-            <li className='transition-transform ease-in-out duration-150 active:scale-95'>
-                <Link to={'/manageUsers'} className={location.pathname === '/manageUsers' ? 'text-blue-400' : 'text-white'}>
-                    Manage Users
-                </Link>
-            </li>
+            {isAdmin && ( // Check if user is admin
+                <li className='transition-transform ease-in-out duration-150 active:scale-95'>
+                    <Link to={'/manageUsers'} className={location.pathname === '/manageUsers' ? 'text-blue-400' : 'text-white'}>
+                        Manage Users
+                    </Link>
+                </li>
+            )}
             <li className='transition-transform ease-in-out duration-150 active:scale-95'>
                 <Link to={'/taskStatusTracking'} className={location.pathname === '/taskStatusTracking' ? 'text-blue-400' : 'text-white'}>
                     Task Status Tracking
@@ -52,6 +68,8 @@ const Body = () => {
 
         </>
     );
+
+    console.log(user.isAdmin)
 
     const handleLogOut = () => {
         logOut()
@@ -82,16 +100,17 @@ const Body = () => {
     return (
         <div>
             <div className="relative" ref={drawerRef}>
-                <button
-                    className="fixed left-0 top-0 m-4 p-2 bg-blue-400 shadow-2xl text-white rounded-full z-10 transition-transform ease-in-out duration-150 active:scale-95"
-                    onClick={(e) => {
-                        e.stopPropagation(); // Prevent click event from propagating
-                        setIsOpen(!isOpen);
-                    }}
-                >
-                    {isOpen ? <AiOutlineClose /> : <AiOutlineMenu></AiOutlineMenu>}
-                </button>
-
+                <div>
+                    <button
+                        className="fixed left-0 top-0 m-4 p-2 bg-blue-400 shadow-2xl text-white rounded-full z-50 transition-transform ease-in-out duration-150 active:scale-95"
+                        onClick={(e) => {
+                            e.stopPropagation(); // Prevent click event from propagating
+                            setIsOpen(!isOpen);
+                        }}
+                    >
+                        {isOpen ? <AiOutlineClose /> : <AiOutlineMenu></AiOutlineMenu>}
+                    </button>
+                </div>
                 <div className={`fixed left-0 top-0 h-full w-64 bg-blue-900 bg-opacity-70 backdrop-blur-md shadow-lg transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                     <div className='text-center text-white font-semibold mt-20  mx-6 h-[500px] custom-scrollbar overflow-auto'>
                         {user && (
@@ -109,6 +128,20 @@ const Body = () => {
                         {user && (
                             <button onClick={handleLogOut} className="text-white bg-blue-400 px-4 py-2 w-11/12 rounded-md transition-transform ease-in-out duration-150 active:scale-95 absolute bottom-4 left-0 right-0 m-auto ">Logout</button>
                         )}
+                    </div>
+                </div>
+                <div className='absolute top-0 right-0 z-10'>
+                    <button onClick={() => setOpenBox(!openBox)} className='bg-blue-400 shadow-2xl m-4 p-2 text-white rounded-full z-10 transition-transform ease-in-out duration-150 active:scale-95'>
+                        {openBox ? <AiOutlineClose></AiOutlineClose> : <AiOutlineBell></AiOutlineBell>}
+                    </button>
+                    <div className='relative'>
+                        {
+                            openBox && (
+                                <div className='w-80 h-60 z-10 absolute right-10 bg-white p-3 font-semibold rounded-lg overflow-auto shadow-2xl '>
+
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             </div>
