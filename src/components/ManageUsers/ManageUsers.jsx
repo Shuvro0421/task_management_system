@@ -91,7 +91,7 @@ const ManageUsers = () => {
             <div className="mt-5 mb-5">
                 <input
                     type="text"
-                    placeholder="Search by email"
+                    placeholder="Search by keywords"
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     className="border border-blue-400 outline-none text-blue-400 px-4 py-2 rounded-md"
