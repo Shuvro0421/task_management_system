@@ -8,6 +8,7 @@ import axios from 'axios';
 const Body = () => {
     useTitle('Home');
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // Loading state
     const location = useLocation();
     const { user, logOut } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -20,7 +21,8 @@ const Body = () => {
 
     useEffect(() => {
         if (!user) return;
-        axios.get(`https://task-management-system-server-psi.vercel.app/${user.email}`)
+        setIsLoading(true); // Set loading to true when starting the request
+        axios.get(`http://localhost:5000/users/${user.email}`)
             .then(response => {
                 const userData = response.data;
                 const isAdmin = userData.length > 0 && userData[0].isAdmin;
@@ -32,12 +34,16 @@ const Body = () => {
             })
             .catch(error => {
                 console.error('Error fetching user details:', error);
+            })
+            .finally(() => {
+                setIsLoading(false); // Set loading to false regardless of success or failure
             });
     }, [user]);
 
     // Function to fetch new task assignments
     const fetchNewTaskAssignments = (userData) => {
-        axios.get('https://task-management-system-server-psi.vercel.app/assign-tasks')
+        setIsLoading(true); // Set loading to true when starting the request
+        axios.get('http://localhost:5000/assign-tasks')
             .then(response => {
                 const newTasks = response.data.filter(task => task?.userId === userData[0]?._id); // Exclude tasks sent by the current user
                 let approachingDeadlineCount = 0;
@@ -63,9 +69,11 @@ const Body = () => {
             })
             .catch(error => {
                 console.error('Error fetching new task assignments:', error);
+            })
+            .finally(() => {
+                setIsLoading(false); // Set loading to false regardless of success or failure
             });
     };
-
 
     const handleLogOut = () => {
         logOut()
@@ -172,23 +180,27 @@ const Body = () => {
                         {openBox && (
                             <div className='w-80 h-60 z-10 absolute right-10 bg-white p-3 font-semibold rounded-lg overflow-auto shadow-2xl'>
                                 {
-                                    contentBox.map((content, index) => (
-                                        <div key={index}>
-                                            <div className='p-2  my-2 border-b-2'>
-                                                <h1 className=''>{content?.title}</h1>
-                                                <h1 className='text-xs'>
-                                                    {content?.description.length >= 40
-                                                        ? content?.description.slice(0, 40) + '...'
-                                                        : content?.description
-                                                    }
-                                                </h1>
-                                                {/* Display deadline if provided */}
-                                                {content.deadline && (
-                                                    <p className="text-sm">Deadline: {content.deadline}</p>
-                                                )}
+                                    isLoading ? (
+                                        <div>Loading...</div>
+                                    ) : (
+                                        contentBox.map((content, index) => (
+                                            <div key={index}>
+                                                <div className='p-2  my-2 border-b-2'>
+                                                    <h1 className=''>{content?.title}</h1>
+                                                    <h1 className='text-xs'>
+                                                        {content?.description.length >= 40
+                                                            ? content?.description.slice(0, 40) + '...'
+                                                            : content?.description
+                                                        }
+                                                    </h1>
+                                                    {/* Display deadline if provided */}
+                                                    {content.deadline && (
+                                                        <p className="text-sm">Deadline: {content.deadline}</p>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))
+                                        ))
+                                    )
                                 }
                             </div>
                         )}

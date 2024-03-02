@@ -34,7 +34,7 @@ const TaskLists = () => {
 
     useEffect(() => {
         setLoading(true);
-        axios.get(`https://task-management-system-server-psi.vercel.app/tasks/${email}`)
+        axios.get(`http://localhost:5000/tasks/${email}`)
             .then(response => {
                 setTasks(response.data);
                 setLoading(false);
@@ -58,7 +58,7 @@ const TaskLists = () => {
     const handleCreateList = () => {
         const selectedTasksInfo = tasks.filter(task => selectedTasks.includes(task._id));
         setSuccessMessage('');
-        axios.post('https://task-management-system-server-psi.vercel.app/lists', { tasks: selectedTasksInfo })
+        axios.post('http://localhost:5000/lists', { tasks: selectedTasksInfo })
             .then(response => {
                 console.log('List created successfully:', response.data);
                 setSelectedTasks([]);
@@ -102,7 +102,7 @@ const TaskLists = () => {
     };
 
     const handleUpdateTask = () => {
-        axios.put(`https://task-management-system-server-psi.vercel.app/tasks/${selectedTaskData._id}`, updatedTaskData)
+        axios.put(`http://localhost:5000/tasks/${selectedTaskData._id}`, updatedTaskData)
             .then(response => {
                 console.log('Task updated successfully:', response.data);
                 // Update the task in the local state with the updated data
@@ -208,7 +208,7 @@ const TaskLists = () => {
             </div>
             {/* Modal for editing task */}
             {showModal && selectedTaskData && (
-                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+                <div className="fixed inset-0 flex justify-center items-center z-50  bg-black bg-opacity-50">
                     <div className="bg-white p-8 rounded-lg w-96">
                         <h2 className="text-lg font-semibold mb-4 text-blue-400">Edit Task</h2>
                         <button></button>

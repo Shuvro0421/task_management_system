@@ -40,7 +40,7 @@ const AuthProvider = ({ children }) => {
             // if user exist then issue a token
             if (currentUser) {
 
-                axios.post('https://task-management-system-server-psi.vercel.app/jwt', loggedUser, { withCredentials: true })
+                axios.post('http://localhost:5000/jwt', loggedUser, { withCredentials: true })
                     .then(res => {
                         console.log('token response', res.data);
                         // Handle token response here if needed
@@ -50,7 +50,7 @@ const AuthProvider = ({ children }) => {
                     });
             }
             else {
-                axios.post('https://task-management-system-server-psi.vercel.app/logout', loggedUser, {
+                axios.post('http://localhost:5000/logout', loggedUser, {
                     withCredentials: true
                 })
                     .then(res => {
@@ -81,7 +81,7 @@ const AuthProvider = ({ children }) => {
                     email: loggedUser.email
                 };
 
-                axios.post('https://task-management-system-server-psi.vercel.app', userData)
+                axios.post('http://localhost:5000/users', userData)
                     .then(res => {
                         console.log('User data stored successfully:', res.data);
                         setLoading(false);

@@ -21,7 +21,7 @@ const TaskStatusTracking = () => {
 
     useEffect(() => {
         setLoading(true);
-        axios.get(`https://task-management-system-server-psi.vercel.app/assign-tasks`)
+        axios.get(`http://localhost:5000/assign-tasks`)
             .then(response => {
                 setTasks(response.data);
                 setLoading(false);
@@ -34,7 +34,7 @@ const TaskStatusTracking = () => {
 
     useEffect(() => {
         setLoading(true);
-        axios.get(`https://task-management-system-server-psi.vercel.app/${email}`)
+        axios.get(`https://task-management-system-server-gamma.vercel.app/${email}`)
             .then(response => {
                 setUserUserId(response.data);
                 setLoading(false);
@@ -66,7 +66,7 @@ const TaskStatusTracking = () => {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const handleStatusChange = (taskId, status) => {
-        axios.post(`https://task-management-system-server-psi.vercel.app/assign-tasks/${taskId}`, { status })
+        axios.post(`http://localhost:5000/assign-tasks/${taskId}`, { status })
             .then(response => {
                 if (response.data.success) {
                     setTasks(tasks.map(task => task._id === taskId ? { ...task, status: status || null } : task));
