@@ -26,7 +26,7 @@ const TaskAssignment = () => {
     
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/tasks`)
+        axios.get(`https://task-management-system-server-6a11.onrender.com/tasks`)
             .then(response => {
                 setTasks(response.data);
                 setLoading(false);
@@ -36,7 +36,7 @@ const TaskAssignment = () => {
                 setLoading(false);
             });
 
-        axios.get('http://localhost:5000/users')
+        axios.get('https://task-management-system-server-6a11.onrender.com/users')
             .then(response => {
                 const filteredUsers = response.data.filter(u => u.email !== email);
                 setUsers(filteredUsers);
@@ -90,7 +90,7 @@ const TaskAssignment = () => {
 
     const assignTasks = () => {
         const selectedTaskDetails = tasks.filter(task => selectedTasks.includes(task._id));
-        axios.post('http://localhost:5000/assign-tasks', {
+        axios.post('https://task-management-system-server-6a11.onrender.com/assign-tasks', {
             selectedTaskDetails: selectedTaskDetails,
             selectedUsers: selectedUsers,
             senderEmail: email

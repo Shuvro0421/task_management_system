@@ -40,7 +40,7 @@ const AuthProvider = ({ children }) => {
             // if user exist then issue a token
             if (currentUser) {
 
-                axios.post('http://localhost:5000/jwt', loggedUser, { withCredentials: true })
+                axios.post('https://task-management-system-server-6a11.onrender.com/jwt', loggedUser, { withCredentials: true })
                     .then(res => {
                         console.log('token response', res.data);
                         // Handle token response here if needed
@@ -50,7 +50,7 @@ const AuthProvider = ({ children }) => {
                     });
             }
             else {
-                axios.post('http://localhost:5000/logout', loggedUser, {
+                axios.post('https://task-management-system-server-6a11.onrender.com/logout', loggedUser, {
                     withCredentials: true
                 })
                     .then(res => {
@@ -81,7 +81,7 @@ const AuthProvider = ({ children }) => {
                     email: loggedUser.email
                 };
 
-                axios.post('http://localhost:5000/users', userData)
+                axios.post('https://task-management-system-server-6a11.onrender.com/users', userData)
                     .then(res => {
                         console.log('User data stored successfully:', res.data);
                         setLoading(false);

@@ -22,7 +22,7 @@ const Body = () => {
     useEffect(() => {
         if (!user) return;
         setIsLoading(true); // Set loading to true when starting the request
-        axios.get(`http://localhost:5000/users/${user.email}`)
+        axios.get(`https://task-management-system-server-6a11.onrender.com/users/${user.email}`)
             .then(response => {
                 const userData = response.data;
                 const isAdmin = userData.length > 0 && userData[0].isAdmin;
@@ -43,7 +43,7 @@ const Body = () => {
     // Function to fetch new task assignments
     const fetchNewTaskAssignments = (userData) => {
         setIsLoading(true); // Set loading to true when starting the request
-        axios.get('http://localhost:5000/assign-tasks')
+        axios.get('https://task-management-system-server-6a11.onrender.com/assign-tasks')
             .then(response => {
                 const newTasks = response.data.filter(task => task?.userId === userData[0]?._id); // Exclude tasks sent by the current user
                 let approachingDeadlineCount = 0;

@@ -21,7 +21,7 @@ const CreateTask = () => {
             return;
         }
         try {
-            await axios.post('http://localhost:5000/tasks', {
+            await axios.post('https://task-management-system-server-6a11.onrender.com/tasks', {
                 title,
                 description,
                 dueDate,
