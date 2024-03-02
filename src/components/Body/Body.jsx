@@ -20,7 +20,7 @@ const Body = () => {
 
     useEffect(() => {
         if (!user) return;
-        axios.get(`http://localhost:5000/users/${user.email}`)
+        axios.get(`https://task-management-system-server-psi.vercel.app/${user.email}`)
             .then(response => {
                 const userData = response.data;
                 const isAdmin = userData.length > 0 && userData[0].isAdmin;
@@ -37,7 +37,7 @@ const Body = () => {
 
     // Function to fetch new task assignments
     const fetchNewTaskAssignments = (userData) => {
-        axios.get('http://localhost:5000/assign-tasks')
+        axios.get('https://task-management-system-server-psi.vercel.app/assign-tasks')
             .then(response => {
                 const newTasks = response.data.filter(task => task?.userId === userData[0]?._id); // Exclude tasks sent by the current user
                 let approachingDeadlineCount = 0;

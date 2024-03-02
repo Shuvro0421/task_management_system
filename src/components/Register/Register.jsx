@@ -45,7 +45,7 @@ const Register = () => {
             console.log('User profile updated successfully');
 
             // Post user data to /users using Axios
-            await axios.post('http://localhost:5000/users', { name, email });
+            await axios.post('https://task-management-system-server-psi.vercel.app', { name, email });
 
             form.reset();
         } catch (error) {

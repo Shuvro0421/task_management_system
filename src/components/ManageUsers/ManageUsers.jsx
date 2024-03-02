@@ -11,7 +11,7 @@ const ManageUsers = () => {
 
     useEffect(() => {
         // Fetch user emails using Axios
-        axios.get('http://localhost:5000/users')
+        axios.get('https://task-management-system-server-psi.vercel.app')
             .then(response => {
                 // Assuming response.data is an array of user objects
                 setUsers(response.data);
@@ -36,7 +36,7 @@ const ManageUsers = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 const endpoint = isAdmin ? 'remove-admin' : 'make-admin';
-                axios.post(`http://localhost:5000/${endpoint}`, { email })
+                axios.post(`https://task-management-system-server-psi.vercel.app/${endpoint}`, { email })
                     .then(response => {
                         console.log(`Successfully ${action === 'make' ? 'made' : 'removed'} admin privileges for ${email}`);
                         // Update the users list to reflect the change

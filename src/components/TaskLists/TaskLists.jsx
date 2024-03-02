@@ -34,7 +34,7 @@ const TaskLists = () => {
 
     useEffect(() => {
         setLoading(true);
-        axios.get(`http://localhost:5000/tasks/${email}`)
+        axios.get(`https://task-management-system-server-psi.vercel.app/tasks/${email}`)
             .then(response => {
                 setTasks(response.data);
                 setLoading(false);
@@ -58,7 +58,7 @@ const TaskLists = () => {
     const handleCreateList = () => {
         const selectedTasksInfo = tasks.filter(task => selectedTasks.includes(task._id));
         setSuccessMessage('');
-        axios.post('http://localhost:5000/lists', { tasks: selectedTasksInfo })
+        axios.post('https://task-management-system-server-psi.vercel.app/lists', { tasks: selectedTasksInfo })
             .then(response => {
                 console.log('List created successfully:', response.data);
                 setSelectedTasks([]);
@@ -102,7 +102,7 @@ const TaskLists = () => {
     };
 
     const handleUpdateTask = () => {
-        axios.put(`http://localhost:5000/tasks/${selectedTaskData._id}`, updatedTaskData)
+        axios.put(`https://task-management-system-server-psi.vercel.app/tasks/${selectedTaskData._id}`, updatedTaskData)
             .then(response => {
                 console.log('Task updated successfully:', response.data);
                 // Update the task in the local state with the updated data

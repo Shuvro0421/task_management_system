@@ -21,7 +21,7 @@ const TaskCategories = () => {
 
     useEffect(() => {
         setLoading(true);
-        axios.get(`http://localhost:5000/tasks/${email}`)
+        axios.get(`https://task-management-system-server-psi.vercel.app/tasks/${email}`)
             .then(response => {
                 setTasks(response.data);
                 setLoading(false);
@@ -43,7 +43,7 @@ const TaskCategories = () => {
     });
 
     const handleCategoryChange = (taskId, category) => {
-        axios.post(`http://localhost:5000/tasks/${taskId}/category`, { category })
+        axios.post(`https://task-management-system-server-psi.vercel.app/tasks/${taskId}/category`, { category })
             .then(response => {
                 // Update the tasks state or handle success
                 console.log(response?.data);
