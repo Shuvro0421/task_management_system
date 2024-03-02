@@ -80,6 +80,19 @@ const TaskStatusTracking = () => {
             });
     };
 
+    // Function to determine the color based on due date proximity
+    const getDueDateColor = (dueDate) => {
+        const today = new Date();
+        const taskDueDate = new Date(dueDate);
+        if (taskDueDate < today) {
+            return 'text-gray-500'; // Past due date
+        } else {
+            const differenceInTime = taskDueDate.getTime() - today.getTime();
+            const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+            return differenceInDays < 3 ? 'text-red-500' : ''; // Less than 3 days to due date
+        }
+    };
+
     return (
         <div className='font-semibold mt-10 text-blue-400'>
             {loading ? (
@@ -116,7 +129,7 @@ const TaskStatusTracking = () => {
                         <div>
                             <div className='grid md:grid-cols-3 grid-cols-1 lg:grid-cols-4 gap-5'>
                                 {currentTasks.map(task => (
-                                    <div className='p-5 rounded-lg shadow-2xl' key={task._id}>
+                                    <div className={`p-5 rounded-lg shadow-2xl ${getDueDateColor(task.dueDate)}`} key={task._id}>
                                         <h1 className='text-xl text-blue-400'>{task.title}</h1>
                                         <h1 className='h-28 overflow-auto text-gray-800'>{task.description}</h1>
                                         <div className='text-xs flex lg:items-center items-start gap-2 lg:flex-row flex-col justify-between my-2'>
